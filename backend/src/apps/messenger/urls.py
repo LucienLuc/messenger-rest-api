@@ -29,8 +29,8 @@ urlpatterns = [
     path('rest-auth/registration/', include('rest_auth.registration.urls')),
     path('rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
     path('rest-auth/twitter/', TwitterLogin.as_view(), name='twitter_login'),
-    path('api-token-auth/', obtain_jwt_token),
-    path('api-token-verify/', verify_jwt_token),
+    # path('api-token-auth/', obtain_jwt_token),
+    # path('api-token-verify/', verify_jwt_token),
     path(
         'socialaccounts/',
         SocialAccountListView.as_view(),
