@@ -15,30 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import FacebookLogin, TwitterLogin
-from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
-from rest_auth.registration.views import (
-    SocialAccountListView, SocialAccountDisconnectView
-)
+from .views import restricted
+# from .views import FacebookLogin, TwitterLogin
+# from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
+# from rest_auth.registration.views import (
+#     SocialAccountListView, SocialAccountDisconnectView
+# )
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('apps.example.api.urls')),
-    path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'),
-    path('rest-auth/twitter/', TwitterLogin.as_view(), name='twitter_login'),
-    # path('api-token-auth/', obtain_jwt_token),
-    # path('api-token-verify/', verify_jwt_token),
-    path(
-        'socialaccounts/',
-        SocialAccountListView.as_view(),
-        name='social_account_list'
-    ),
-    path (
-        'socialaccounts/<int:pk>/disconnect/',
-        SocialAccountDisconnectView.as_view(),
-        name='social_account_disconnect'
-    )
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
+    path('auth/restricted/', restricted)
 ]

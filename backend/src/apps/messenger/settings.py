@@ -37,20 +37,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'rest_framework.authtoken',
-    'rest_auth',
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'rest_auth.registration',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.twitter',
+    'djoser',
+    # 'rest_framework.authtoken',
+    # 'rest_auth',
+    # 'django.contrib.sites',
+    # 'allauth',
+    # 'allauth.account',
+    # 'rest_auth.registration',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.facebook',
+    # 'allauth.socialaccount.providers.twitter',
     'channels',
     'corsheaders',
 
-    'apps.chat',
-    'apps.example'
+    'apps.chat'
 ]
 
 MIDDLEWARE = [
@@ -137,30 +137,51 @@ STATIC_URL = '/static/'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = False
 
-SITE_ID = 1
+# SITE_ID = 1
 # CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
 ASGI_APPLICATION = 'apps.messenger.routing.application'
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
 
-# REST_USE_JWT = True
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('JWT',),
+}
+
+# DJOSER = {
+#     'TOKEN_MODEL': None,
+#     'PERMISSIONS': {
+#         'activation': ['rest_framework.permissions.AllowAny'],
+#         'password_reset': ['rest_framework.permissions.AllowAny'],
+#         'password_reset_confirm': ['rest_framework.permissions.AllowAny'],
+#         'set_password': ['djoser.permissions.CurrentUserOrAdmin'],
+#         'username_reset': ['rest_framework.permissions.AllowAny'],
+#         'username_reset_confirm': ['rest_framework.permissions.AllowAny'],
+#         'set_username': ['djoser.permissions.CurrentUserOrAdmin'],
+#         'user_create': ['rest_framework.permissions.AllowAny'],
+#         'user_delete': ['djoser.permissions.CurrentUserOrAdmin'],
+#         'user': ['djoser.permissions.CurrentUserOrAdmin'],
+#         'user_list': ['djoser.permissions.CurrentUserOrAdmin'],
+#         'token_create': ['rest_framework.permissions.AllowAny'],
+#         'token_destroy': ['rest_framework.permissions.IsAuthenticated'],
+#     }
+# }
