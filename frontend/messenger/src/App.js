@@ -70,12 +70,6 @@ chatSocket.send(JSON.stringify({
 
   return (
     <div>
-      <Button onClick={handleRegister}>
-      Register Jimmy
-      </Button>
-      <Button onClick={handleLogin}>
-      Log in Jimmy
-      </Button>
       <Button onClick={handleGetUser}>
         Get Jimmy
       </Button>
@@ -99,7 +93,6 @@ function App(props) {
         <Landing/>
       </header>
       <Switch>
-        
         <Route exact path = "/login" component = {Login} />
         <Route exact path = "/register" component = {Register} />
         <Route exact path = "/lobby" component = {ChatLobby} />

@@ -1,9 +1,12 @@
-import React, {useState} from 'react'
-import {List,Button,Drawer, Form, Input, message} from 'antd'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios'
+
+import {List,Button,Drawer, Form, Input} from 'antd'
 
 function ChatLobby() {
 
     const [createLobbyVisible, setState] = useState(false)
+    const [availableRooms, setRoomData] = useState()
 
     const showCreateLobby = () => {
         setState(true)
@@ -12,34 +15,65 @@ function ChatLobby() {
     const onClose = () => {
         setState(false)
     }
-    
-    const onCreateRoom = (values) => {
-        console.log(values)
+
+    const getRoomData = () => {
+        axios.get('http://127.0.0.1:8000/chat/getRooms').then(response => {
+            var res = response.data.map(elm => {
+                return {title: elm.name}
+            })
+            setRoomData(res)
+        }).catch(error => console.log(error))
     }
+
+    //change to also include description and pass
+    const onCreateRoom = (values) => {
+        const input = {
+            name: values.roomname
+        }
+        axios.post('http://127.0.0.1:8000/chat/getRooms',input).then(response => {
+            console.log(response)
+        }).catch(error => console.log(error))
+    }
+    /*
     const data = [
         {
             title: 'Lobby 1',
-            description: 'description 1'
-        },
-        {
-            title: 'Lobby 2',
-            description: 'description 2'
-        },
-        {
-            title: 'Lobby 3', 
-            description: 'description 3'
+            description: 'description 1',
+            password: 'password'
         }
-
     ]
+    */
+
+    useEffect(() => {
+        //Figure out why cannot just call function getRoomData function
+        axios.get('http://127.0.0.1:8000/chat/getRooms').then(response => {
+            var res = response.data.map(elm => {
+                return {title: elm.name}
+            })
+            setRoomData(res)
+        }).catch(error => console.log(error))
+    },[])
 
     return (
         <div>
+            <h1 style = {{textAlign: 'center'}}>Available Rooms</h1>
+            <div style= {{textAlign: 'center'}}>
             <Button onClick = {showCreateLobby}>
                 Create Room
             </Button>
+            <Button onClick = {getRoomData}>
+                Refresh
+            </Button>
+            </div>
             <List
+                style = {{
+                    margin: '10px 10% 50px 10%', 
+                    padding: '10px', 
+                    border: '2px solid grey',
+                    borderRadius:'5px'
+                }}
                 itemLayout = 'horizontal'
-                dataSource = {data}
+                dataSource = {availableRooms}
                 renderItem = {(item) => (
                     <List.Item>
                         <List.Item.Meta
@@ -96,5 +130,4 @@ function ChatLobby() {
         </div>
     )
 }
-
 export default ChatLobby

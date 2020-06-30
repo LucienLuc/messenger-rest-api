@@ -6,7 +6,7 @@ function Landing() {
 
     return (
         <Menu mode = 'horizontal'>
-            <Menu.Item key = 'home'>
+            <Menu.Item key = 'homepage'> 
                 Home
             </Menu.Item>
                 <a href = './login'>Login</a>

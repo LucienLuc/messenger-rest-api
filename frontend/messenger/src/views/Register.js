@@ -16,7 +16,8 @@ function Register() {
             }).catch(error => console.log(error))
     }
     return (
-        <div>
+        <div style = {{margin: '100px 40% 100px'}}>
+            <h1> Registration </h1>
             <Form
             name="normal_register"
             className="register-form"
@@ -73,6 +74,7 @@ function Register() {
                 Register
                 </Button>
                 </Form.Item>
+                 Already have an account?<a href="login"> Login</a>
             </Form>
         </div>
     )

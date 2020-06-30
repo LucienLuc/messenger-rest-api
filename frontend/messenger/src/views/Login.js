@@ -21,7 +21,8 @@ function Login() {
       }
 
     return (
-        <div>
+        <div style = {{margin: '100px 40% 100px'}}>
+        <h1>Login to Messenger</h1>
         <Form
             name="normal_login"
             className="login-form"
