@@ -16,6 +16,7 @@ import ChatLobby from './views/ChatLobby'
 
 function User(props) {
   const [token, setToken] = useState('')
+  const [messages, setMessages] = useState([])
 
   // const handleClick = () => {
   //   axios.get('http://127.0.0.1:8000/api/').then(response => {
@@ -40,10 +41,11 @@ function User(props) {
       response => console.log(response)).catch(error => console.log(error))
   }
 
-/*
+  const roomName = 'room1'
+
   const chatSocket = new WebSocket(
     'ws://'
-    + window.location.host
+    + 'localhost:8000'
     + '/ws/chat/'
     + roomName
     + '/'
@@ -52,22 +54,40 @@ function User(props) {
 
 chatSocket.onmessage = function(e) {
   const data = JSON.parse(e.data);
-  document.querySelector('#chat-log').value += (data.message + '\n');
+  console.log(data);
+  setMessages(messages.concat(data.message))
 };
 
 chatSocket.onclose = function(e) {
   console.error('Chat socket closed unexpectedly');
 };
 
+const sendMessage = () => {
 chatSocket.send(JSON.stringify({
-  'message': message
+  'message': 'allah'
 }));
-*/
+}
 
   return (
-    <p>
-      hello
-    </p>
+    <div>
+      <Button onClick={handleRegister}>
+      Register Jimmy
+      </Button>
+      <Button onClick={handleLogin}>
+      Log in Jimmy
+      </Button>
+      <Button onClick={handleGetUser}>
+        Get Jimmy
+      </Button>
+      <Button onClick={sendMessage}>
+        Send Message
+      </Button>
+      {messages.map((value, index) => {
+        return (
+          <p>{value}</p>
+        )
+      })}
+    </div>
   )
 }
 

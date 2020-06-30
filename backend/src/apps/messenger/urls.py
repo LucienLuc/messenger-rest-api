@@ -21,11 +21,12 @@ from .views import restricted
 # from rest_auth.registration.views import (
 #     SocialAccountListView, SocialAccountDisconnectView
 # )
-
-
+import os
+print(os.path.abspath(__file__))
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
-    path('auth/restricted/', restricted)
+    path('auth/restricted/', restricted),
+    path('chat/', include('apps.chat.api.urls'))
 ]
