@@ -9,7 +9,12 @@ import {Button} from 'antd';
 import Landing from './views/Landing'
 import Login from './views/Login'
 import Register from './views/Register'
+import Confirmation from './views/Confirmation'
 import ChatLobby from './views/ChatLobby'
+import ChatRoom from './views/ChatRoom'
+import Profile from './views/Profile'
+
+import {UserProvider} from './context'
 
 //const serv = '127.0.0.1:8000/'
 //const serv2 = 'localhost:8000/api'
@@ -87,16 +92,27 @@ chatSocket.send(JSON.stringify({
 
 function App(props) {
 
+  const [access, setAccess] = useState('')
+  const changeAccess = (newval) => {
+    setAccess(newval)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <Landing/>
       </header>
+      <UserProvider value = {{access, changeAccess}}>
       <Switch>
+        <Route exact path = "/" component = {Login}/>
         <Route exact path = "/login" component = {Login} />
         <Route exact path = "/register" component = {Register} />
+        <Route exact path = '/confirmation' component = {Confirmation} />
         <Route exact path = "/lobby" component = {ChatLobby} />
+        <Route exact path = "/chatroom" component = {ChatRoom} />
+        <Route exact path = "/profile" component = {Profile} />
       </Switch>
+      </UserProvider>
     </div>
   );
 }
