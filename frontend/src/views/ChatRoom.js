@@ -26,9 +26,10 @@ function ChatRoom(props) {
     };
 
     const sendMessage = () => {
-    chatSocket.send(JSON.stringify({
-    'message': 'allah'
-    }));
+        console.log('sending message')
+        chatSocket.send(JSON.stringify({
+        'message': 'allah'
+        }));
     }
 
     const getMessages = () => {
@@ -44,6 +45,13 @@ function ChatRoom(props) {
                 border: '2px solid grey',
                 borderRadius:'5px'
             }}>
+                {messages.map((value,index) => {
+                    return (
+                        <div>
+                            {value}
+                        </div>
+                    )
+                })}
             </div>
             <Input  style = {{
                 margin: '10px 10% 50px',

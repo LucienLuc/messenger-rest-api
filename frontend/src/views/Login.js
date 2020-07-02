@@ -1,19 +1,16 @@
-import React, {useContext} from 'react';
+import React from 'react';
 
 import 'antd/dist/antd.css';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios'
 
-import UserContext from '../context'
 //import App from '../App';
 
-function Login() {
-    const {access, changeAccess} = useContext(UserContext)
+function Login(props) {
+  //  const accessToken = localStorage.getItem('accessToken')
 
-    const seeAccess = () => {
-      console.log(access)
-  }
+  //   const {access, changeAccess} = useContext(UserContext)
 
   const config = {
     headers: {
@@ -60,10 +57,12 @@ function Login() {
             password: values.password
           }).then(
             response => {
-                //runs when login is successful
-                changeAccess(response.data.access)
+                localStorage.setItem('accessToken', response.data.access)
+                localStorage.setItem('isLoggedIn', true)
                 console.log("Success!")
                 console.log(response)
+                message.success('Successfully logged in!')
+                props.history.push('/lobby')
             }).catch(error => console.log(error))
       }
 
