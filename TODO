@@ -1,0 +1,63 @@
+backend
+    rooms:
+        change name to title
+        add optional room description
+        add a list of members
+        add a list of admin
+        add creator
+        add a list of notifications
+            - someone is kicked
+            - someone is requesting to join
+            - someone is promoted to admin
+            - someone is demoted to member
+            - promoted to creator
+            - demoted to admin
+            - someone kicks themselves
+            - someone is online
+        add room id
+        add list of messages (from newest to oldest)
+        add list of active users
+
+    Message:
+        content
+        sender
+
+    User:
+        list of notifications
+        list of rooms he created
+        list of rooms he is admin in
+        list of rooms he is a member of
+
+    Notifications:
+        string
+
+    endpoints:
+        edit creating a room - available to logged in users
+        add request to join room - available to logged in users
+        have a get n recent messages - available to members
+        add change description - available to creators
+        add kick user - available to creators and admin, available to member if it is
+            themself they are kicking
+        add accept x member - available to creators and admin
+        add get notifications - available to logged in users
+        add promote to admin - available to creators
+        add demote to member - available to creators
+        add promote to creator - available to creators
+
+        set up auth with sending/receiving messages - available to only members
+
+        
+general:
+    add a way of encrypting users in rooms and the messages they send on
+        the server so they have complete anonymity and security
+
+
+
+frontend
+    lobby page:
+        show the creator of the room?
+
+
+
+other
+    make sure pycache and node_modules arent being pushed

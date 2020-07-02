@@ -12,16 +12,44 @@ function Login(props) {
 
   //   const {access, changeAccess} = useContext(UserContext)
 
-  //   const seeAccess = () => {
-  //     console.log(dummy)
-  // }
+  const config = {
+    headers: {
+      // 'Access-Control-Allow-Origin': '*',
+      // 'Access-Control-Allow-Methods': 'HEAD, GET, POST, PUT, PATCH, DELETE', 
+      // 'Content-type': 'application/json',
+      'Authorization': `JWT ${access}`,
+    }
+  }
 
-  // const config = {
-  //   headers: {
-  //     'Content-type': 'application/json',
-  //     'Authorization': `JWT ${accessToken}`,
-  //   }
-  // }
+  const changePassword = () => {
+    console.log(config.headers.Authorization)
+    axios.get('http://127.0.0.1:8000/auth/users/me/', config).then(response => {
+        console.log(response)
+    }).catch(error => console.log(error))
+  }
+
+  // delete this later or move it
+  const req = () => {
+    axios.post('http://127.0.0.1:8000/chat/requestToJoinRoom/', {roomName: 'adsf'}, config).then(response => console.log(response))
+    .catch(error => console.log(error))
+  }
+
+  const otherReq = () => {
+    let conf = config
+    conf.params = {
+      roomName: 'adsf'
+    }
+    axios.get('http://127.0.0.1:8000/chat/getRequestsForRoom/', conf).then(response => console.log(response))
+    .catch(error => console.log(error))
+  }
+
+  const acceptReq = () => {
+    axios.post('http://127.0.0.1:8000/chat/acceptUser/', {
+      roomName: 'adsf',
+      username: 'a'
+    },config).then(response => console.log(response))
+    .catch(error => console.log(error))
+  }
 
     const onLogin = (values) => {
         axios.post('http://127.0.0.1:8000/auth/jwt/create/', {
@@ -40,6 +68,11 @@ function Login(props) {
 
     return (
         <div style = {{margin: '100px 40% 100px'}}>
+          <Button onClick = {seeAccess}> See Access</Button>
+          <Button onClick = {changePassword}> change pass </Button>
+          <Button onClick={req}>req</Button>
+          <Button onClick={otherReq}>otherReq</Button>
+          <Button onClick={acceptReq}>acc</Button>
         <h1>Login to Messenger</h1>
         <Form
             name="normal_login"
