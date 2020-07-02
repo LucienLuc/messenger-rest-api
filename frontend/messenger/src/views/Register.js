@@ -15,6 +15,7 @@ function Register() {
                 console.log(response)
             }).catch(error => console.log(error))
     }
+    
     return (
         <div style = {{margin: '100px 40% 100px'}}>
             <h1> Registration </h1>

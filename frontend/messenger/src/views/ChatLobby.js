@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
-import {List,Button,Drawer, Form, Input} from 'antd'
+import {List,Button,Drawer, Form, Input, message} from 'antd'
 
 function ChatLobby() {
 
@@ -31,7 +31,20 @@ function ChatLobby() {
             name: values.roomname
         }
         axios.post('http://127.0.0.1:8000/chat/getRooms',input).then(response => {
-            console.log(response)
+            console.log(response);
+            message.success('Successfully created room');
+        }).catch(error => console.log(error))
+
+        //close drawer
+        onClose();
+
+        //refresh room list
+        axios.get('http://127.0.0.1:8000/chat/getRooms').then(response => {
+            console.log('here')
+            var res = response.data.map(elm => {
+                return {title: elm.name}
+            })
+            setRoomData(res)
         }).catch(error => console.log(error))
     }
     /*
@@ -91,6 +104,7 @@ function ChatLobby() {
                 width = {720}
                 onClose = {onClose}
                 visible = {createLobbyVisible}
+                destroyOnClose = {true}
             >
                 <Form
                 onFinish = {onCreateRoom}
