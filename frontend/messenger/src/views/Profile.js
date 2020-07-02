@@ -6,6 +6,8 @@ import {Button} from 'antd'
 import UserContext from '../context'
 
 function Profile() {
+    const accessToken = localStorage.getItem('accessToken')
+
     const {access} = useContext(UserContext)
 
     const config = {
@@ -14,7 +16,7 @@ function Profile() {
         }
     }
     const changePassword = () => {
-        axios.get('http://127.0.0.1:8000/auth/users/me', config).then(response => {
+        axios.get('http://127.0.0.1:8000/auth/users/me/', config).then(response => {
             console.log(response)
         }).catch(error => console.log(error))
     }

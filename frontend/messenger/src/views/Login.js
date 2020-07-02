@@ -1,34 +1,27 @@
 import React, {useContext} from 'react';
 
 import 'antd/dist/antd.css';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios'
 
 import UserContext from '../context'
 //import App from '../App';
 
-function Login() {
-    const {access, changeAccess} = useContext(UserContext)
+function Login(props) {
+    const accessToken = localStorage.getItem('accessToken')
 
-    const seeAccess = () => {
-      console.log(access)
-  }
+  //   const {access, changeAccess} = useContext(UserContext)
+
+  //   const seeAccess = () => {
+  //     console.log(dummy)
+  // }
 
   const config = {
     headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'HEAD, GET, POST, PUT, PATCH, DELETE', 
       'Content-type': 'application/json',
-      'Authorization': `JWT ${access}`,
+      'Authorization': `JWT ${accessToken}`,
     }
-  }
-
-  const changePassword = () => {
-    console.log(config.headers.Authorization)
-    axios.get('http://127.0.0.1:8000/auth/users/me', config).then(response => {
-        console.log(response)
-    }).catch(error => console.log(error))
   }
 
     const onLogin = (values) => {
@@ -38,16 +31,17 @@ function Login() {
           }).then(
             response => {
                 //runs when login is successful
-                changeAccess(response.data.access)
+                localStorage.setItem('accessToken', response.data.access)
+                //changeAccess(response.data.access)
                 console.log("Success!")
                 console.log(response)
+                message.success('Successfully logged in!')
+                props.history.push('/lobby')
             }).catch(error => console.log(error))
       }
 
     return (
         <div style = {{margin: '100px 40% 100px'}}>
-          <Button onClick = {seeAccess}> See Access</Button>
-          <Button onClick = {changePassword}> change pass </Button>
         <h1>Login to Messenger</h1>
         <Form
             name="normal_login"
