@@ -1,15 +1,14 @@
-import React, {useContext} from 'react';
+import React from 'react';
 
 import 'antd/dist/antd.css';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios'
 
-import UserContext from '../context'
 //import App from '../App';
 
 function Login(props) {
-    const accessToken = localStorage.getItem('accessToken')
+  //  const accessToken = localStorage.getItem('accessToken')
 
   //   const {access, changeAccess} = useContext(UserContext)
 
@@ -17,12 +16,12 @@ function Login(props) {
   //     console.log(dummy)
   // }
 
-  const config = {
-    headers: {
-      'Content-type': 'application/json',
-      'Authorization': `JWT ${accessToken}`,
-    }
-  }
+  // const config = {
+  //   headers: {
+  //     'Content-type': 'application/json',
+  //     'Authorization': `JWT ${accessToken}`,
+  //   }
+  // }
 
     const onLogin = (values) => {
         axios.post('http://127.0.0.1:8000/auth/jwt/create/', {
@@ -30,9 +29,8 @@ function Login(props) {
             password: values.password
           }).then(
             response => {
-                //runs when login is successful
                 localStorage.setItem('accessToken', response.data.access)
-                //changeAccess(response.data.access)
+                localStorage.setItem('isLoggedIn', true)
                 console.log("Success!")
                 console.log(response)
                 message.success('Successfully logged in!')

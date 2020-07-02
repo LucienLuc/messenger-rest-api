@@ -90,7 +90,7 @@ function ChatLobby() {
                 renderItem = {(item) => (
                     <List.Item>
                         <List.Item.Meta
-                            title = {<a>{item.title}</a>}
+                            title = {<p>{item.title}</p>}
                             description = {item.description}
                         />
                     </List.Item>

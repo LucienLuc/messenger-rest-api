@@ -11,7 +11,7 @@ function Navbar(props) {
     }
 
    const isLoggedIn = () => {
-        console.log(accessToken)
+        //console.log(accessToken)
         if (accessToken === '') return false
         return true
     }
@@ -21,7 +21,7 @@ function Navbar(props) {
         props.history.push('/')
     }
 
-    function ConditionalLoggedIn(props){
+    const ConditionalLoggedIn = (props) => {
         const isLoggedIn = props.isLoggedIn
         if (isLoggedIn) {
             return (
@@ -30,7 +30,6 @@ function Navbar(props) {
                 right: '25px',
                 top: '3px'
                 }}>
-                
                 <Button onClick = {logout} >Logout</Button>
             </div>
             )
@@ -48,14 +47,28 @@ function Navbar(props) {
         )
     }
     
+    // const handleLobbySelect = (isLoggedIn) => {
+    //     // console.log('inside: ' + isLoggedIn)
+    //     if (isLoggedIn) {
+    //         props.history.push('/lobby')
+    //     }
+    //     else {
+    //         message.error('You must be logged in to view that page!')
+    //         props.history.push('/login')
+    //     }
+    // }
+
+    const handleLobbySelect = () => {
+        props.history.push('/lobby')
+    }
+
     return (
         <div>
-            {/* <Button onClick = {getToken}> get Token </Button> */}
             <Menu mode = 'horizontal'>
                 <Menu.Item key = 'homepage'> 
                     Home
                 </Menu.Item>
-                <Menu.Item key = 'lobbies'>
+                <Menu.Item key = 'lobbies' onClick = {handleLobbySelect}>
                     View Lobbies
                 </Menu.Item>
                 <ConditionalLoggedIn isLoggedIn = {isLoggedIn()}> </ConditionalLoggedIn>
