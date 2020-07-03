@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import {List,Button,Drawer, Form, Input, message} from 'antd'
 
-function ChatLobby() {
+function ChatLobby(props) {
     const accessToken = localStorage.getItem('accessToken')
     const config = {
         headers: {
@@ -27,7 +27,7 @@ function ChatLobby() {
         }).catch(error => console.log(error))
     }
 
-    //change to also include description and pass
+    //change to also include more fields
     const onCreateRoom = (values) => {
         const input = {
             title: values.roomname,
@@ -43,11 +43,7 @@ function ChatLobby() {
 
         //refresh room list
         axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
-            console.log('here')
-            var res = response.data.map(elm => {
-                return {title: elm.name}
-            })
-            setRoomData(res)
+            setRoomData(response.data)
         }).catch(error => console.log(error))
     }
 
@@ -57,6 +53,40 @@ function ChatLobby() {
             setRoomData(response.data)
         }).catch(error => console.log(error))
     },[])
+
+    //stub
+    const isMember = () => {
+        return true
+    }
+
+    const handleJoinRoom = (roomData) => {
+        //maybe verify auth?
+        props.history.push({
+            pathname: '/chatroom',
+            state: {
+                data: roomData
+            }
+        })
+    }
+
+    function JoinButton(prop) {
+        const isMember = prop.isMember
+        const roomData = prop.roomData
+        if (isMember) {
+            return (
+                <Button onClick = {() => handleJoinRoom(roomData)}>
+                    Join
+                </Button>
+            )
+        }
+        else {
+            return (
+                <Button>
+                    Request to Join
+                </Button>
+            )
+        }
+    }
 
     return (
         <div>
@@ -80,7 +110,7 @@ function ChatLobby() {
                 dataSource = {availableRooms}
                 renderItem = {(item) => (
                     <List.Item
-                    actions={[<a key="list-loadmore-edit">edit</a>, <a key="list-loadmore-more">more</a>]}
+                    actions={[<JoinButton isMember={isMember()} roomData={item}></JoinButton>, <a key="list-loadmore-more">more</a>]}
                     >
                         <List.Item.Meta
                             title = {<p>{item.title}</p>}
