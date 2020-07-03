@@ -8,7 +8,7 @@ import axios from 'axios'
 //import App from '../App';
 
 function Login(props) {
-  //  const accessToken = localStorage.getItem('accessToken')
+  const accessToken = localStorage.getItem('accessToken')
 
   //   const {access, changeAccess} = useContext(UserContext)
 
@@ -17,7 +17,7 @@ function Login(props) {
       // 'Access-Control-Allow-Origin': '*',
       // 'Access-Control-Allow-Methods': 'HEAD, GET, POST, PUT, PATCH, DELETE', 
       // 'Content-type': 'application/json',
-      'Authorization': `JWT ${access}`,
+      'Authorization': `JWT ${accessToken}`,
     }
   }
 
@@ -68,8 +68,8 @@ function Login(props) {
 
     return (
         <div style = {{margin: '100px 40% 100px'}}>
-          <Button onClick = {seeAccess}> See Access</Button>
-          <Button onClick = {changePassword}> change pass </Button>
+          {/* <Button onClick = {seeAccess}> See Access</Button>
+          <Button onClick = {changePassword}> change pass </Button> */}
           <Button onClick={req}>req</Button>
           <Button onClick={otherReq}>otherReq</Button>
           <Button onClick={acceptReq}>acc</Button>

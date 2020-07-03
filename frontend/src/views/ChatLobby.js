@@ -17,20 +17,18 @@ function ChatLobby() {
     }
 
     const getRoomData = () => {
-        axios.get('http://127.0.0.1:8000/chat/getRooms').then(response => {
-            var res = response.data.map(elm => {
-                return {title: elm.name}
-            })
-            setRoomData(res)
+        axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
+            console.log(response.data)
+            setRoomData(response.data)
         }).catch(error => console.log(error))
     }
 
     //change to also include description and pass
     const onCreateRoom = (values) => {
         const input = {
-            name: values.roomname
+            title: values.roomname
         }
-        axios.post('http://127.0.0.1:8000/chat/getRooms',input).then(response => {
+        axios.post('http://127.0.0.1:8000/chat/getRooms/',input).then(response => {
             console.log(response);
             message.success('Successfully created room');
         }).catch(error => console.log(error))
@@ -39,7 +37,7 @@ function ChatLobby() {
         onClose();
 
         //refresh room list
-        axios.get('http://127.0.0.1:8000/chat/getRooms').then(response => {
+        axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
             console.log('here')
             var res = response.data.map(elm => {
                 return {title: elm.name}
@@ -47,23 +45,11 @@ function ChatLobby() {
             setRoomData(res)
         }).catch(error => console.log(error))
     }
-    /*
-    const data = [
-        {
-            title: 'Lobby 1',
-            description: 'description 1',
-            password: 'password'
-        }
-    ]
-    */
 
     useEffect(() => {
         //Figure out why cannot just call function getRoomData function
-        axios.get('http://127.0.0.1:8000/chat/getRooms').then(response => {
-            var res = response.data.map(elm => {
-                return {title: elm.name}
-            })
-            setRoomData(res)
+        axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
+            setRoomData(response.data)
         }).catch(error => console.log(error))
     },[])
 
@@ -124,12 +110,6 @@ function ChatLobby() {
                         label = 'Description (optional)'
                     >
                     <Input></Input>
-                    </Form.Item>
-                    <Form.Item
-                        name = 'password'
-                        label = 'Password (optional)'
-                    >
-                        <Input></Input>
                     </Form.Item>
                     <Form.Item>
                         <Button
