@@ -12,6 +12,7 @@ djangorestframework-simplejwt = "*"
 djoser = "*"
 django-cors-headers = "*"
 channels = "*"
+channels-redis = "*"
 
 [requires]
 python_version = "3.8"
