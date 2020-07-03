@@ -9,9 +9,9 @@ class Room(models.Model):
     description = models.CharField(max_length=200)
     members = models.ManyToManyField(User, related_name='a')
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='b')
-    admin = models.ManyToManyField(User, related_name='c')
+    admin = models.ManyToManyField(User, blank=True, related_name='c')
     # messages
-    onlineUsers = models.ManyToManyField(User, related_name='d')
+    onlineUsers = models.ManyToManyField(User, blank=True, related_name='d')
     #     add a list of notifications
     #         - someone is kicked
     #         - someone is requesting to join

@@ -4,7 +4,12 @@ import axios from 'axios'
 import {List,Button,Drawer, Form, Input, message} from 'antd'
 
 function ChatLobby() {
-
+    const accessToken = localStorage.getItem('accessToken')
+    const config = {
+        headers: {
+            'Authorization': `JWT ${accessToken}`
+        }
+    }
     const [createLobbyVisible, setState] = useState(false)
     const [availableRooms, setRoomData] = useState()
 
@@ -17,9 +22,9 @@ function ChatLobby() {
     }
 
     const getRoomData = () => {
-        axios.get('http://127.0.0.1:8000/chat/getRooms').then(response => {
+        axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
             var res = response.data.map(elm => {
-                return {title: elm.name}
+                return {title: elm.title}
             })
             setRoomData(res)
         }).catch(error => console.log(error))
@@ -28,9 +33,10 @@ function ChatLobby() {
     //change to also include description and pass
     const onCreateRoom = (values) => {
         const input = {
-            name: values.roomname
+            title: values.roomname,
+            description: values.description
         }
-        axios.post('http://127.0.0.1:8000/chat/getRooms',input).then(response => {
+        axios.post('http://127.0.0.1:8000/chat/createRooms/',input, config).then(response => {
             console.log(response);
             message.success('Successfully created room');
         }).catch(error => console.log(error))
@@ -39,7 +45,7 @@ function ChatLobby() {
         onClose();
 
         //refresh room list
-        axios.get('http://127.0.0.1:8000/chat/getRooms').then(response => {
+        axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
             console.log('here')
             var res = response.data.map(elm => {
                 return {title: elm.name}
@@ -59,7 +65,7 @@ function ChatLobby() {
 
     useEffect(() => {
         //Figure out why cannot just call function getRoomData function
-        axios.get('http://127.0.0.1:8000/chat/getRooms').then(response => {
+        axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
             var res = response.data.map(elm => {
                 return {title: elm.name}
             })
@@ -88,10 +94,12 @@ function ChatLobby() {
                 itemLayout = 'horizontal'
                 dataSource = {availableRooms}
                 renderItem = {(item) => (
-                    <List.Item>
+                    <List.Item
+                    actions={[<a key="list-loadmore-edit">edit</a>, <a key="list-loadmore-more">more</a>]}
+                    >
                         <List.Item.Meta
                             title = {<p>{item.title}</p>}
-                            description = {item.description}
+                            description = {<p>{item.description}</p>}
                         />
                     </List.Item>
                 )}
