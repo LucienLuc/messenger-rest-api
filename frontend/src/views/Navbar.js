@@ -26,7 +26,7 @@ function Navbar(props) {
         if (isLoggedIn) {
             return (
                 <div style = {{
-                position: 'fixed', 
+                position: 'absolute', 
                 right: '25px',
                 top: '3px'
                 }}>

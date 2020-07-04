@@ -3,10 +3,17 @@ import axios from 'axios'
 
 import {SettingFilled} from '@ant-design/icons';
 
-import {Input,Button, Descriptions, Space, Row, Col} from 'antd'
+import {Input,Button, Descriptions, Row, Col, Modal} from 'antd'
+
+const {Search} = Input;
 
 function ChatRoom(props) {
     const [messages, setMessages] = useState([])
+
+    const [settingsVisible, setSettingsVisible] = useState(false)
+    const [roomTitle, setRoomName] = useState(props.location.state.data.title)
+    const [roomDescription, setRoomDescription] = useState(props.location.state.data.description)
+
     const roomName = 'room1'
 
     // const chatSocket = new WebSocket(
@@ -42,6 +49,41 @@ function ChatRoom(props) {
         console.log(props.location.state.title)
     }
 
+    const handleSettingsClick = () => {
+        setSettingsVisible(true)
+    }
+
+    const handleOk = () => {
+        setSettingsVisible(false)
+    }
+
+    const handleCancel = () => {
+        setSettingsVisible(false)
+    }
+
+    const handleEditTitle = (e) => {
+        console.log(e.target.value)
+        const config = {
+            'roomName': roomTitle,
+            'title' : 'newroom'
+        
+    }
+        axios.post('http://127.0.0.1:8000/chat/changeRoomTitle',config).then(response => {
+            console.log(response)
+        })
+    }
+
+    const handleEditDescription = (e) => { 
+        console.log(e.target.value)
+        const config = {
+            'roomName': roomTitle,
+            'description' : 'new description'
+        
+    }
+        axios.post('http://127.0.0.1:8000/chat/changeDescription',config).then(response => {
+            console.log(response)
+        })
+    }
     return (
         <div>
             <Row justify = 'center'>
@@ -57,9 +99,10 @@ function ChatRoom(props) {
                 border: '2px solid grey',
                 borderRadius:'5px'
             }}>
+                <SettingFilled onClick = {handleSettingsClick}/>
                 <Descriptions title = 'Room Info' size = 'small' layout = 'vertical' column = {1} bordered = 'true'>
-                    <Descriptions.Item label = 'Name'> {props.location.state.data.title} </Descriptions.Item>
-                    <Descriptions.Item label = 'Description'> {props.location.state.data.description} </Descriptions.Item>
+                    <Descriptions.Item label = 'Name'> {roomTitle} </Descriptions.Item>
+                    <Descriptions.Item label = 'Description'> {roomDescription} </Descriptions.Item>
                 </Descriptions>
             </div>
             </Col>
@@ -98,6 +141,16 @@ function ChatRoom(props) {
             <Button>
                 send message
             </Button>
+
+            <Modal 
+            title = 'Room Options' 
+            visible = {settingsVisible}
+            onOk = {handleOk}
+            onCancel = {handleCancel}
+            >
+                <Input defaultValue = {roomTitle} onPressEnter = {handleEditTitle}></Input>
+                <Input defaultValue = {roomDescription} onPressEnter = {handleEditDescription}></Input>
+            </Modal>
         </div>
     )
 }

@@ -5,13 +5,17 @@ import {List,Button,Drawer, Form, Input, message} from 'antd'
 
 function ChatLobby(props) {
     const accessToken = localStorage.getItem('accessToken')
+
     const config = {
         headers: {
             'Authorization': `JWT ${accessToken}`
         }
     }
+    
     const [createLobbyVisible, setState] = useState(false)
     const [availableRooms, setRoomData] = useState()
+    //probably not the best way to do this
+    const [userID, setUserID] = useState()
 
     const showCreateLobby = () => {
         setState(true)
@@ -24,6 +28,7 @@ function ChatLobby(props) {
     const getRoomData = () => {
         axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
             setRoomData(response.data)
+            //console.log(availableRooms)
         }).catch(error => console.log(error))
     }
 
@@ -36,15 +41,15 @@ function ChatLobby(props) {
         axios.post('http://127.0.0.1:8000/chat/createRooms/',input, config).then(response => {
             console.log(response);
             message.success('Successfully created room');
+        }).catch(error => console.log(error)).then(() => {
+            //refresh room list
+            axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
+            setRoomData(response.data)
         }).catch(error => console.log(error))
+        })
 
         //close drawer
         onClose();
-
-        //refresh room list
-        axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
-            setRoomData(response.data)
-        }).catch(error => console.log(error))
     }
 
     useEffect(() => {
@@ -52,11 +57,22 @@ function ChatLobby(props) {
         axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
             setRoomData(response.data)
         }).catch(error => console.log(error))
+
+        axios.get('http://127.0.0.1:8000/auth/users/me/', config).then(response => {
+            setUserID(response.data.id)
+        }).catch(error => console.log(error))
     },[])
 
     //stub
-    const isMember = () => {
-        return true
+    const isMember = (roomData) => {
+        //console.log(roomData)
+        const roomMembersList = roomData.members
+        if (roomMembersList.includes(userID)) {
+            return true
+        }
+        else {
+            return false;
+        }
     }
 
     const handleJoinRoom = (roomData) => {
@@ -70,15 +86,15 @@ function ChatLobby(props) {
     }
 
     function JoinButton(prop) {
-        const isMember = prop.isMember
         const roomData = prop.roomData
+        const isMember = prop.isMember
         if (isMember) {
             return (
                 <Button onClick = {() => handleJoinRoom(roomData)}>
                     Join
                 </Button>
             )
-        }
+         }
         else {
             return (
                 <Button>
@@ -110,7 +126,10 @@ function ChatLobby(props) {
                 dataSource = {availableRooms}
                 renderItem = {(item) => (
                     <List.Item
-                    actions={[<JoinButton isMember={isMember()} roomData={item}></JoinButton>, <a key="list-loadmore-more">more</a>]}
+                    actions={[
+                        <JoinButton isMember={isMember(item)} roomData={item}/>, 
+                        <p>Owner: {item.creator}</p>, 
+                        <p>{item.onlineUsers.length}/{item.members.length}</p>]}
                     >
                         <List.Item.Meta
                             title = {<p>{item.title}</p>}

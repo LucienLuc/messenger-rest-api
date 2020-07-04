@@ -1,10 +1,10 @@
 import React from 'react'
 import axios from 'axios'
 
-import {Form, Input, Button} from 'antd'
+import {Form, Input, Button, message} from 'antd'
 import { UserOutlined, LockOutlined} from '@ant-design/icons';
 
-function Register() {
+function Register(props) {
 
     const onRegister = (values) => {
         axios.post('http://127.0.0.1:8000/auth/users/', {
@@ -13,6 +13,8 @@ function Register() {
           }).then(
             response => {
                 console.log(response)
+                message.success('Successfully registered!')
+                props.history.push('/login')
             }).catch(error => console.log(error))
     }
     
