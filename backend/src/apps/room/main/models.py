@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from apps.lobby.main.models import Lobby
+
 class Room(models.Model):
     title = models.CharField(max_length=30, primary_key=True)
     description = models.CharField(max_length=200)
@@ -9,3 +11,4 @@ class Room(models.Model):
     admins = models.ManyToManyField(User, blank=True, related_name='room_admins')
     onlineUsers = models.ManyToManyField(User, blank=True, related_name='room_online_users')
     requests = models.ManyToManyField(User, blank=True, related_name='room_requests')
+    creator = models.ForeignKey(Lobby, on_delete=models.CASCADE, related_name='room_lobby')
