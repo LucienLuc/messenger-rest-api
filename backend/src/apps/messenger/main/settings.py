@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 print(BASE_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -38,19 +38,13 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'djoser',
-    # 'rest_framework.authtoken',
-    # 'rest_auth',
-    # 'django.contrib.sites',
-    # 'allauth',
-    # 'allauth.account',
-    # 'rest_auth.registration',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.facebook',
-    # 'allauth.socialaccount.providers.twitter',
     'channels',
     'corsheaders',
 
-    'apps.chat'
+    'apps.chat',
+    'apps.myauth',
+    'apps.room',
+    'apps.lobby'
 ]
 
 MIDDLEWARE = [
@@ -65,7 +59,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
-ROOT_URLCONF = 'apps.messenger.urls'
+ROOT_URLCONF = 'apps.messenger.api.urls'
 
 TEMPLATES = [
     {
@@ -149,7 +143,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-ASGI_APPLICATION = 'apps.messenger.routing.application'
+ASGI_APPLICATION = 'apps.messenger.api.routing.application'
 
 CHANNEL_LAYERS = {
     'default': {
@@ -167,23 +161,4 @@ SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),
 }
 
-AUTH_USER_MODEL = 'chat.User'
-
-# DJOSER = {
-#     'TOKEN_MODEL': None,
-#     'PERMISSIONS': {
-#         'activation': ['rest_framework.permissions.AllowAny'],
-#         'password_reset': ['rest_framework.permissions.AllowAny'],
-#         'password_reset_confirm': ['rest_framework.permissions.AllowAny'],
-#         'set_password': ['djoser.permissions.CurrentUserOrAdmin'],
-#         'username_reset': ['rest_framework.permissions.AllowAny'],
-#         'username_reset_confirm': ['rest_framework.permissions.AllowAny'],
-#         'set_username': ['djoser.permissions.CurrentUserOrAdmin'],
-#         'user_create': ['rest_framework.permissions.AllowAny'],
-#         'user_delete': ['djoser.permissions.CurrentUserOrAdmin'],
-#         'user': ['djoser.permissions.CurrentUserOrAdmin'],
-#         'user_list': ['djoser.permissions.CurrentUserOrAdmin'],
-#         'token_create': ['rest_framework.permissions.AllowAny'],
-#         'token_destroy': ['rest_framework.permissions.IsAuthenticated'],
-#     }
-# }
+# AUTH_USER_MODEL = 'apps.myauth.main.User'

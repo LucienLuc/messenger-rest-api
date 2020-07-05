@@ -36,15 +36,15 @@ function ChatLobby(props) {
         axios.post('http://127.0.0.1:8000/chat/createRooms/',input, config).then(response => {
             console.log(response);
             message.success('Successfully created room');
-        }).catch(error => console.log(error))
+        }).then(() => {
+            axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
+            setRoomData(response.data)
+        })
+        })
+        .catch(error => console.log(error))
 
         //close drawer
         onClose();
-
-        //refresh room list
-        axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
-            setRoomData(response.data)
-        }).catch(error => console.log(error))
     }
 
     useEffect(() => {
