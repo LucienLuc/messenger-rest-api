@@ -59,7 +59,6 @@ function Login(props) {
             response => {
                 localStorage.setItem('accessToken', response.data.access)
                 localStorage.setItem('isLoggedIn', true)
-                console.log("Success!")
                 console.log(response)
                 message.success('Successfully logged in!')
                 props.history.push('/lobby')
