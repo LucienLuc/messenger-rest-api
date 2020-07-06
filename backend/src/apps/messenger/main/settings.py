@@ -161,4 +161,4 @@ SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),
 }
 
-# AUTH_USER_MODEL = 'apps.myauth.main.User'
+AUTH_USER_MODEL = 'myauth.User'

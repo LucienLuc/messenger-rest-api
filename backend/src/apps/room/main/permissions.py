@@ -2,7 +2,7 @@ from rest_framework import permissions
 
 class RoomMember(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj):
-        return request.user in obj.members
+        return request.user in obj.members.all()
 
 class RoomAdmin(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj):
