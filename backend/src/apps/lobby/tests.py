@@ -12,7 +12,7 @@ from rest_framework.parsers import JSONParser
 import json
 
 
-class LobbyViewSet(APITestCase):
+class LobbyViewSetTest(APITestCase):
 
     def setUp(self):
         # create user

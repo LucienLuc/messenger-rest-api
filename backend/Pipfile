@@ -13,6 +13,9 @@ djoser = "*"
 django-cors-headers = "*"
 channels = "*"
 channels-redis = "*"
+coverage = "*"
+model-mommy = "*"
+django-nose = "*"
 
 [requires]
 python_version = "3.8"
