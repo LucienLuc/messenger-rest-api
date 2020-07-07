@@ -11,6 +11,8 @@ from apps.room.main.models import Room
 
 from apps.room.main.permissions import RoomCreator, RoomMember, RoomAdmin
 
+
+import json
 # lobbies can only be read 
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
@@ -18,12 +20,16 @@ class RoomViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], permission_classes=(RoomCreator, RoomAdmin))
     def KickUser(self, request, pk):
+        print("request.data" + str(request.data))
         room = self.get_object()
-        serializer = UserSerializer(data=request.data)
+        serializer = UserSerializer(data=json.dumps(request.data))
+        print('serializer: ' + str(serializer))
+        print('serializer valid?: ' + str(serializer.is_valid()))
         if serializer.is_valid():
             user = serializer.save()
             if user in room.members:
                 room.members.remove(user)
+
 
     @action(detail=True, methods=['post'], permission_classes=(RoomCreator, RoomAdmin))
     def AcceptUser(self, request, pk):

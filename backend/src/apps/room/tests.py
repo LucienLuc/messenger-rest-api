@@ -11,6 +11,7 @@ import io
 from rest_framework.parsers import JSONParser
 import json
 
+from rest_framework.test import APIClient
 
 class RoomViewSetTest(APITestCase):
 
@@ -18,10 +19,13 @@ class RoomViewSetTest(APITestCase):
         # create user
         self.user = User(username='a')
         self.user.save()
+        self.user2 = User(username='b')
+        self.user2.save()
         self.lobby = Lobby(title='Lobby1', description='test')
         self.lobby.save()
         self.room = Room(title='Room1', description='test', creator=self.user, Lobby=self.lobby)
         self.room.members.add(self.user)
+        self.room.members.add(self.user2)
         self.room.save()
 
     def tearDown(self):
@@ -44,8 +48,24 @@ class RoomViewSetTest(APITestCase):
         if ser.is_valid():
             self.assertEqual(ser.validated_data, self.room)
 
-    def testKickUser(self):
-        pass
+    def testKickUserBasic(self):
+        # factory = APIRequestFactory()
+        # request = factory.get('/room/Room1', {'username': 'b'}, format='json')
+        # force_authenticate(request, user=self.user)
+        # # create view
+        # view = RoomViewSet.as_view(actions={'post': 'KickUser'})
+
+
+        # response = view(request, pk='Room1')
+        # print(response)
+
+        client = APIClient()
+        client.force_authenticate(user=self.user)
+        response = client.post('/room/Room1/KickUser/',{'username': 'b'})
+        # print('response:' + str(response))
+        # check user2 is not in Room.objects.get(title='Room1').members
+        print("test kick user:" + str(Room.objects.get(title='Room1').members.all()))
+        
 
     def testAcceptUser(self):
         pass
