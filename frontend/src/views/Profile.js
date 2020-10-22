@@ -3,16 +3,12 @@ import axios from 'axios'
 
 import {Button} from 'antd'
 
-import UserContext from '../context'
-
 function Profile() {
     const accessToken = localStorage.getItem('accessToken')
 
-    const {access} = useContext(UserContext)
-
     const config = {
         headers: {
-        'Authorization': `JWT ${access}`
+        'Authorization': `JWT ${accessToken}`
         }
     }
     const changePassword = () => {
@@ -21,14 +17,9 @@ function Profile() {
         }).catch(error => console.log(error))
     }
 
-    const seeAccess = () => {
-        console.log(access)
-    }
-
     return (
         <div>
             <Button onClick = {changePassword}> change password </Button>
-            <Button onClick = {seeAccess}> see Access </Button>
         </div>
     )
 }
