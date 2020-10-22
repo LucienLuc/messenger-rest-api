@@ -6,7 +6,7 @@ from rest_framework import status
 from apps.chat.main.models import Message
 
 class GetNRecentMessages(APIView):
-    def get(self, request, fromat=None):
+    def get(self, request, format=None):
         serializer = MessageSerializer(data=request.query_params)
         if serializer.is_valid():
             roomName = serializer.validated_data['roomName']

@@ -159,6 +159,7 @@ CHANNEL_LAYERS = {
 
 SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),
+   'USER_ID_FIELD': 'username',
 }
 
 AUTH_USER_MODEL = 'myauth.User'
