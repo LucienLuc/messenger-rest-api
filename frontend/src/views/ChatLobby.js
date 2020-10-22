@@ -14,8 +14,7 @@ function ChatLobby(props) {
 
     const [createLobbyVisible, setState] = useState(false)
     const [availableRooms, setRoomData] = useState()
-    //probably not the best way to do this
-    const [userID, setUserID] = useState()
+    const [currentUser, setUser] = useState()
 
     const showCreateLobby = () => {
         setState(true)
@@ -30,7 +29,12 @@ function ChatLobby(props) {
         axios.get('http://127.0.0.1:8000/lobby/Lobby1/', config).then(response => {
             console.log(response.data.room_lobby)
             setRoomData(response.data.room_lobby)
-            console.log(availableRooms)
+        }).catch(error => console.log(error))
+
+        //Saves logged in user
+        axios.get('http://127.0.0.1:8000/auth/users/me/', config).then(response => {
+            console.log(response)
+            setUser(response.data.username)
         }).catch(error => console.log(error))
     }
 
@@ -55,6 +59,8 @@ function ChatLobby(props) {
         onClose();
     }
 
+    //Delete because using usernames as id's
+    /*
     useEffect(() => {
         //Figure out why cannot just call function getRoomData function
         axios.get('http://127.0.0.1:8000/chat/getRooms/').then(response => {
@@ -63,14 +69,17 @@ function ChatLobby(props) {
 
         axios.get('http://127.0.0.1:8000/auth/users/me/', config).then(response => {
             setUserID(response.data.id)
+            console.log(response.data.id)
         }).catch(error => console.log(error))
     },[])
+    */
 
     //stub
     const isMember = (roomData) => {
-        //console.log(roomData)
         const roomMembersList = roomData.members
-        if (roomMembersList.includes(userID)) {
+        console.log(roomMembersList)
+        console.log(currentUser)
+        if (roomMembersList.includes(currentUser)) {
             return true
         }
         else {
