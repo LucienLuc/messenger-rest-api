@@ -43,12 +43,11 @@ function ChatRoom(props) {
 
     const [memberList, setMemberList] = useState() 
 
-    window.onload = () => {
-        console.log(props.location.state.data.members)
+   window.onload = () => {
+        console.log('here')
         const temp = props.location.state.data.members
-        setMemberList(temp)
-        console.log(memberList)
-    }
+        setMemberList(props.location.state.data.members)
+   }
 
     const getMessages = () => {
         console.log(props)
@@ -94,7 +93,6 @@ function ChatRoom(props) {
     }
     return (
         <div>
-
             <Row justify = 'center'>
             {/* <Button onClick = {handle}>
                 test prop passing

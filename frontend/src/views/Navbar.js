@@ -1,17 +1,16 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom';
-import {Menu,Button} from 'antd'
+import {Menu,Button,message} from 'antd'
 
 function Navbar(props) {
     const accessToken = localStorage.getItem('accessToken')
 
     //for debug purposes
-    const getToken = () => {
-        console.log(accessToken)
-    }
+    // const getToken = () => {
+    //     console.log(accessToken)
+    // }
 
    const isLoggedIn = () => {
-        //console.log(accessToken)
         if (accessToken === '') return false
         return true
     }
@@ -47,19 +46,21 @@ function Navbar(props) {
         )
     }
     
-    // const handleLobbySelect = (isLoggedIn) => {
-    //     // console.log('inside: ' + isLoggedIn)
-    //     if (isLoggedIn) {
-    //         props.history.push('/lobby')
-    //     }
-    //     else {
-    //         message.error('You must be logged in to view that page!')
-    //         props.history.push('/login')
-    //     }
-    // }
-
     const handleLobbySelect = () => {
-        props.history.push('/lobby')
+        var loggedIn = false
+        if (accessToken === '') {
+            loggedIn = false
+        }
+        else {
+            loggedIn = true
+        }
+        if (loggedIn) {
+            props.history.push('/lobby')
+        }
+        else {
+            message.error('You must be logged in to view that page!')
+            props.history.push('/login')
+        }
     }
 
     return (
