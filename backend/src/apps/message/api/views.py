@@ -28,7 +28,7 @@ class MessageViewSet(viewsets.ModelViewSet):
             room.messages.add(obj)
             return Response(data=request.data, status=200)
         return Response(data=request.data, status=400)
-
+    
     def get_permissions(self):
         permission_classes = []
         if self.action in ['create', 'list', 'retrieve']:

@@ -9,6 +9,7 @@ const {Search} = Input;
 
 function ChatRoom(props) {
     const accessToken = localStorage.getItem('accessToken')
+    const [currentUser, setUser] = useState()
 
     const config = {
         headers: {
@@ -56,10 +57,6 @@ function ChatRoom(props) {
         setMemberList(props.location.state.data.members)
    }
 
-    const getMessages = () => {
-        console.log(props)
-    }
-
     const handle = () => {
         console.log(props.location.state.title)
     }
@@ -76,14 +73,31 @@ function ChatRoom(props) {
         setSettingsVisible(false)
     }
     const sendMessage = () => {
+        //Get who is sending message
+        axios.get('http://127.0.0.1:8000/auth/users/me/', config).then(response => {
+            return response.data.username
+        }).then((response) => {
         const input = {
-            message: 'Hello World!',
-            sender: {username: 'dummy'},
-            room: {title: 'room1'}
+            message: 'Greetings',
+            sender: {username: response},
+            room: {title: roomTitle}
         }
+        console.log(input)
+
         axios.post('http://127.0.0.1:8000/message/', input, config).then(response => {
             console.log(response)
         }).catch(error => (console.log(error)))
+    })}
+
+    const getMessages = () => {
+        axios.get('http://127.0.0.1:8000/room/' + roomTitle + '/', config).then(response => {
+            console.log(response.data.messages)
+            return response.data.messages
+        }).catch(error => (console.log(error))).then((messages) => {
+            axios.get('http://127.0.0.1:8000/message/', config).then(response => {
+                console.log(response.data[0])
+            })
+        })
     }
 
     const handleEditTitle = (e) => {
@@ -109,6 +123,7 @@ function ChatRoom(props) {
     }
     return (
         <div>
+            <Button onClick = {getMessages}>getMessages</Button>
             <Row justify = 'center'>
             {/* <Button onClick = {handle}>
                 test prop passing

@@ -27,7 +27,7 @@ function ChatLobby(props) {
     //Assumes a lobby named Lobby1 has been created in the backend
     const getRoomData = () => {
         axios.get('http://127.0.0.1:8000/lobby/Lobby1/', config).then(response => {
-            //console.log(response.data.room_lobby)
+            console.log(response.data.room_lobby)
             setRoomData(response.data.room_lobby)
         }).catch(error => console.log(error))
 

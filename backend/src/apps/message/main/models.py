@@ -6,7 +6,7 @@ User = user_model()
 class Message(models.Model):
     message = models.CharField(max_length=200)
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
-    unique_id = models.UUIDField(primary_key = True, default=uuid.uuid4, editable=False, unique=True)
+    unique_id = models.AutoField(primary_key = True)
 
     def __str__(self):
         return self.message
