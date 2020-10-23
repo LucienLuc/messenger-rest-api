@@ -156,16 +156,22 @@ function ChatRoom(props) {
             </div>
             </Col>
             </Row>
+
+            <Row justify= 'center'>
+            <Col flex = '240px'></Col>
+            <Col flex = 'auto'>
             <Input  style = {{
-                margin: '10px 10% 50px',
-                padding: '10px'
             }}>
             </Input>
+            </Col>
+            <Col flex = '240px'>
             {/* add onclick function */}
-            <Button>
-                send message
+            <Button style = {{
+            }}>
+                Send
             </Button>
-
+            </Col>
+            </Row>
             <Modal 
             title = 'Room Options' 
             visible = {settingsVisible}
