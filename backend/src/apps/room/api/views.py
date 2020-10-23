@@ -60,8 +60,6 @@ class RoomViewSet(viewsets.ModelViewSet):
         return Response(data=request.data, status= 400)
 
     def create(self, request, *args, **kwargs):
-        print('in create')
-        print(request.data)
         userSerializer = GetUserSerializer(data=request.data['creator'])
         lobbySerializer = GetLobbySerializer(data=request.data['lobby'])
         # RoomSerializer = RoomSerializer(data=request.data)

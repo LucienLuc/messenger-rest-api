@@ -1,8 +1,8 @@
 from django.db import models
-# from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model as user_model
 User = user_model()
 from apps.lobby.main.models import Lobby
+from apps.message.main.models import Message
 
 class Room(models.Model):
     title = models.CharField(max_length=30, primary_key=True)
@@ -13,6 +13,7 @@ class Room(models.Model):
     onlineUsers = models.ManyToManyField(User, blank=True, related_name='room_online_users')
     requests = models.ManyToManyField(User, blank=True, related_name='room_requests')
     Lobby = models.ForeignKey(Lobby, on_delete=models.CASCADE, related_name='room_lobby')
-
+    messages = models.ManyToManyField(Message, blank=True)
+    
     def __str__(self):
         return self.title

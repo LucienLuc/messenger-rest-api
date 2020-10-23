@@ -8,6 +8,13 @@ import {Input,Button, Descriptions, Row, Col, Modal, List} from 'antd'
 const {Search} = Input;
 
 function ChatRoom(props) {
+    const accessToken = localStorage.getItem('accessToken')
+
+    const config = {
+        headers: {
+          'Authorization': `JWT ${accessToken}`,
+        }
+      }
     const [messages, setMessages] = useState([])
 
     const [settingsVisible, setSettingsVisible] = useState(false)
@@ -68,13 +75,22 @@ function ChatRoom(props) {
     const handleCancel = () => {
         setSettingsVisible(false)
     }
+    const sendMessage = () => {
+        const input = {
+            message: 'Hello World!',
+            sender: {username: 'dummy'},
+            room: {title: 'room1'}
+        }
+        axios.post('http://127.0.0.1:8000/message/', input, config).then(response => {
+            console.log(response)
+        }).catch(error => (console.log(error)))
+    }
 
     const handleEditTitle = (e) => {
         console.log(e.target.value)
         const config = {
             'roomName': roomTitle,
             'title' : 'newroom'
-        
     }
         axios.post('http://127.0.0.1:8000/chat/changeRoomTitle',config).then(response => {
             console.log(response)
@@ -166,8 +182,7 @@ function ChatRoom(props) {
             </Col>
             <Col flex = '240px'>
             {/* add onclick function */}
-            <Button style = {{
-            }}>
+            <Button onClick = {sendMessage}>
                 Send
             </Button>
             </Col>

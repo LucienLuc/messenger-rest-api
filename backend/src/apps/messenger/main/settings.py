@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -44,7 +45,8 @@ INSTALLED_APPS = [
     'apps.chat',
     'apps.myauth',
     'apps.room',
-    'apps.lobby'
+    'apps.lobby',
+    'apps.message'
 ]
 
 MIDDLEWARE = [
@@ -160,6 +162,7 @@ CHANNEL_LAYERS = {
 SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),
    'USER_ID_FIELD': 'username',
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30)
 }
 
 AUTH_USER_MODEL = 'myauth.User'

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from django.db import models
 from .models import Room
 
 class RoomSerializer(serializers.ModelSerializer):
@@ -9,6 +9,9 @@ class RoomSerializer(serializers.ModelSerializer):
     requests = serializers.PrimaryKeyRelatedField(many=True, read_only = True)
     class Meta:
         model = Room
-        fields = '__all__'
+        fields = ['title', 'members', 'admins','onlineUsers','requests']
+
+class GetRoomSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=30)
 
     
