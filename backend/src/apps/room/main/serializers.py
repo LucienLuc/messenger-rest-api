@@ -9,7 +9,7 @@ class RoomSerializer(serializers.ModelSerializer):
     requests = serializers.PrimaryKeyRelatedField(many=True, read_only = True)
     class Meta:
         model = Room
-        fields = ['title', 'members', 'admins','onlineUsers','requests']
+        fields = '__all__'
 
 class GetRoomSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=30)
