@@ -67,11 +67,6 @@ function Login(props) {
 
     return (
         <div style = {{margin: '100px 40% 100px'}}>
-          {/* <Button onClick = {seeAccess}> See Access</Button>
-          <Button onClick = {changePassword}> change pass </Button> */}
-          <Button onClick={req}>req</Button>
-          <Button onClick={otherReq}>otherReq</Button>
-          <Button onClick={acceptReq}>acc</Button>
         <h1>Login to Messenger</h1>
         <Form
             name="normal_login"
