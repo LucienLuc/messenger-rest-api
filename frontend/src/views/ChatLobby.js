@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import axios from 'axios'
 
-import {List,Button,Drawer, Form, Input, message} from 'antd'
+import {List, Button, Drawer, Form, Input, message} from 'antd'
 
 function ChatLobby(props) {
     const accessToken = localStorage.getItem('accessToken')
@@ -43,15 +43,21 @@ function ChatLobby(props) {
         const input = {
             title: values.roomname,
             description: values.description,
-            Lobby: 'Lobby1'
+            creator: {'username': currentUser}, 
+            admins: [],
+            onlineUsers: [],
+            requests: [],
+            lobby: {title: 'Lobby1', description: 'test'}
         }
-        axios.post('http://127.0.0.1:8000/room/',input, config).then(response => {
+
+        axios.post('http://127.0.0.1:8000/room/', input, config).then(response => {
             console.log(response);
             message.success('Successfully created room');
         }).catch(error => console.log(error)).then(() => {
             //refresh room list
-            axios.get('http://127.0.0.1:8000/room/').then(response => {
-            setRoomData(response.data)
+            axios.get('http://127.0.0.1:8000/lobby/Lobby1/', config).then(response => {
+            //console.log(response.data.room_lobby)
+            setRoomData(response.data.room_lobby)
         }).catch(error => console.log(error))
         })
 
@@ -77,8 +83,8 @@ function ChatLobby(props) {
     //stub
     const isMember = (roomData) => {
         const roomMembersList = roomData.members
-        console.log(roomMembersList)
-        console.log(currentUser)
+        // console.log(roomMembersList)
+        // console.log(currentUser)
         if (roomMembersList.includes(currentUser)) {
             return true
         }
@@ -97,6 +103,15 @@ function ChatLobby(props) {
         })
     }
 
+    const handleJoinRequest = (user) => {
+        const input = {
+            username: user
+        }
+        axios.post('http://127.0.0.1:8000/room/Room1/UserRequest/', input, config).then(response => {
+            console.log(response.data)
+        }).catch(error => console.log(error))
+    }
+
     function JoinButton(prop) {
         const roomData = prop.roomData
         const isMember = prop.isMember
@@ -109,7 +124,7 @@ function ChatLobby(props) {
          }
         else {
             return (
-                <Button>
+                <Button onClick = {() => handleJoinRequest(roomData)}>
                     Request to Join
                 </Button>
             )

@@ -9,4 +9,6 @@ class LobbySerializer(serializers.ModelSerializer):
     class Meta:
         model = Lobby
         fields = ['title','room_lobby']
-        
+
+class GetLobbySerializer(serializers.Serializer): 
+    title = serializers.CharField(max_length=30)

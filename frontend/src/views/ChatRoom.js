@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import {SettingFilled} from '@ant-design/icons';
 
-import {Input,Button, Descriptions, Row, Col, Modal} from 'antd'
+import {Input,Button, Descriptions, Row, Col, Modal, List} from 'antd'
 
 const {Search} = Input;
 
@@ -40,6 +40,15 @@ function ChatRoom(props) {
     //     'message': 'allah'
     //     }));
     // }
+
+    const [memberList, setMemberList] = useState() 
+
+    window.onload = () => {
+        console.log(props.location.state.data.members)
+        const temp = props.location.state.data.members
+        setMemberList(temp)
+        console.log(memberList)
+    }
 
     const getMessages = () => {
         console.log(props)
@@ -78,7 +87,6 @@ function ChatRoom(props) {
         const config = {
             'roomName': roomTitle,
             'description' : 'new description'
-        
     }
         axios.post('http://127.0.0.1:8000/chat/changeDescription',config).then(response => {
             console.log(response)
@@ -86,6 +94,7 @@ function ChatRoom(props) {
     }
     return (
         <div>
+
             <Row justify = 'center'>
             {/* <Button onClick = {handle}>
                 test prop passing
@@ -97,10 +106,16 @@ function ChatRoom(props) {
                 width: '200px',
                 margin: '20px',
                 border: '2px solid grey',
-                borderRadius:'5px'
+                borderRadius:'5px',
+                padding: '4px'
             }}>
                 <SettingFilled onClick = {handleSettingsClick}/>
-                <Descriptions title = 'Room Info' size = 'small' layout = 'vertical' column = {1} bordered = 'true'>
+                <Descriptions 
+                    title = 'Room Info' 
+                    size = 'small' 
+                    layout = 'vertical' 
+                    column = {1} 
+                    bordered = 'true'>
                     <Descriptions.Item label = 'Name'> {roomTitle} </Descriptions.Item>
                     <Descriptions.Item label = 'Description'> {roomDescription} </Descriptions.Item>
                 </Descriptions>
@@ -127,8 +142,19 @@ function ChatRoom(props) {
                 width: '200px',
                 margin: '20px',
                 border: '2px solid grey',
-                borderRadius:'5px'
+                borderRadius:'5px',
+                padding: '4px'
             }}>
+                <List
+                    header = 'Members'
+                    dataSource = {memberList}
+                    renderItem = {item => (
+                    <List.Item>
+                        {item}
+                    </List.Item>
+                    )}
+                >
+                </List>
             </div>
             </Col>
             </Row>
