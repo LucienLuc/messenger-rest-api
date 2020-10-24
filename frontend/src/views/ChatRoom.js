@@ -6,7 +6,7 @@ import {BellOutlined, CheckOutlined, CloseOutlined} from '@ant-design/icons';
 import {Input,Button, Descriptions, Row, Col, Modal, List, message} from 'antd'
 
 function ChatRoom(props) {
-    const accessToken = localStorage.getItem('accessToken')
+    const accessToken = sessionStorage.getItem('accessToken')
     const [currentUser, setUser] = useState()
 
     const config = {

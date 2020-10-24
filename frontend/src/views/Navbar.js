@@ -3,20 +3,16 @@ import { withRouter } from 'react-router-dom';
 import {Menu,Button,message} from 'antd'
 
 function Navbar(props) {
-    const accessToken = localStorage.getItem('accessToken')
-
-    //for debug purposes
-    // const getToken = () => {
-    //     console.log(accessToken)
-    // }
+    const accessToken = sessionStorage.getItem('accessToken')
 
    const isLoggedIn = () => {
-        if (accessToken === '') return false
+        if (accessToken === null) return false
         return true
     }
 
     const logout = () => {
-        localStorage.setItem('accessToken', '')
+        sessionStorage.clear()
+        // sessionStorage.setItem('accessToken', '')
         props.history.push('/')
     }
 

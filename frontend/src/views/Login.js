@@ -6,13 +6,13 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios'
 
 function Login(props) {
-   const accessToken = localStorage.getItem('accessToken')
+   const accessToken = sessionStorage.getItem('accessToken')
 
-  const config = {
-    headers: {
-      'Authorization': `JWT ${accessToken}`,
-    }
-  }
+  // const config = {
+  //   headers: {
+  //     'Authorization': `JWT ${accessToken}`,
+  //   }
+  // }
 
     const onLogin = (values) => {
         axios.post('http://127.0.0.1:8000/auth/jwt/create/', {
@@ -20,9 +20,8 @@ function Login(props) {
             password: values.password
           }).then(
             response => {
-                localStorage.setItem('accessToken', response.data.access)
-                localStorage.setItem('isLoggedIn', true)
-                console.log(response)
+                sessionStorage.setItem('accessToken', response.data.access)
+                sessionStorage.setItem('isLoggedIn', true)
                 message.success('Successfully logged in!')
                 props.history.push('/lobby')
             }).catch(error => {
@@ -69,15 +68,6 @@ function Login(props) {
           type="password"
           placeholder="Password"
         />
-      </Form.Item>
-      <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
-        <a className="login-form-forgot" href="">
-          Forgot password
-        </a>
       </Form.Item>
 
       <Form.Item>

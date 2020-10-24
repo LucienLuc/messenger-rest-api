@@ -4,7 +4,7 @@ import axios from 'axios'
 import {List, Button, Drawer, Form, Input, message} from 'antd'
 
 function ChatLobby(props) {
-    const accessToken = localStorage.getItem('accessToken')
+    const accessToken = sessionStorage.getItem('accessToken')
 
     const config = {
         headers: {
@@ -190,7 +190,11 @@ function ChatLobby(props) {
                     </Form.Item>
                     <Form.Item
                         name = 'description'
-                        label = 'Description (optional)'
+                        label = 'Description'
+                        rules = {[{
+                            required: true,
+                            message: 'A description is required'
+                        }]}
                     >
                     <Input></Input>
                     </Form.Item>
