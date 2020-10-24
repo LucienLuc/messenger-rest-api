@@ -3,7 +3,7 @@ This full stack project uses Django as backend and React as frontend. It feature
 Registered users are capable of creating multiple chat rooms where they can chat with others in the same chat room. Other users can join a
 chat room by request which can be accepted or rejected by the room creator. 
 
-Most backend code in collaboration with [@colbytanderson](https://github.com/colbytanderson)
+Backend code in collaboration with [@colbytanderson](https://github.com/colbytanderson)
 
 ## How to Use
 1. Clone repo
