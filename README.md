@@ -1,6 +1,9 @@
 # messenger-rest-api
+This full stack project uses Django as backend and React as frontend. It features login and registration functionality using JWT authentication. 
+Registered users are capable of creating multiple chat rooms where they can chat with others in the same chat room. Other users can join a
+chat room by request which can be accepted or rejected by the room creator. 
 
-most backend code in collaboration with [@colbytanderson](https://github.com/colbytanderson)
+Most backend code in collaboration with [@colbytanderson](https://github.com/colbytanderson)
 
 ## How to Use
 1. Clone repo
