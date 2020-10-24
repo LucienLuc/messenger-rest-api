@@ -19,8 +19,8 @@ Most backend code in collaboration with [@colbytanderson](https://github.com/col
   2. run `npm i`
 5. Start frontend React server by running `npm run start`
 
-Backend server hosted on localhost::8000
-Frontend server hosted on localhost:3000
+* Backend server hosted on localhost::8000
+* Frontend server hosted on localhost:3000
 
 ## Dependencies
 Based on backend code, the frontend requires there to be a lobby named "Lobby1" in the backend. 
