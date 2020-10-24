@@ -39,3 +39,6 @@ Based on backend code, the frontend requires there to be a lobby named "Lobby1" 
 - Landing Page
 - Light/Dark mode
 - Remove dependency on database having Lobby1
+- Notifcation for user when a new request or chat message is sent
+- Chat encryption
+- User profile page
