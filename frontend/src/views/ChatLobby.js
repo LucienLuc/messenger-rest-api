@@ -91,7 +91,7 @@ function ChatLobby(props) {
         const input = {
             username: user
         }
-        axios.post('http://127.0.0.1:8000/room/Room1/UserRequest/', input, config).then(response => {
+        axios.options('http://127.0.0.1:8000/room/room1/UserRequest/', config).then(response => {
             console.log(response.data)
         }).catch(error => console.log(error))
     }

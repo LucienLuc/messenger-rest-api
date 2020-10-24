@@ -1,10 +1,11 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
 import {SettingFilled} from '@ant-design/icons';
 
-import {Input,Button, Descriptions, Row, Col, Modal, List} from 'antd'
+import {Input,Button, Descriptions, Row, Col, Modal, List, message} from 'antd'
 
+import InfiniteScroll from 'react-infinite-scroller';
 const {Search} = Input;
 
 function ChatRoom(props) {
@@ -15,8 +16,13 @@ function ChatRoom(props) {
         headers: {
           'Authorization': `JWT ${accessToken}`,
         }
-      }
+    }
+
+    const [inputValue, setInputValue] = useState('')
     const [messages, setMessages] = useState([])
+    //States for infinite scroll
+    const [loading, setLoading] = useState(false)
+    const [hasMore, setHasMore] = useState(true)
 
     const [settingsVisible, setSettingsVisible] = useState(false)
     const [roomTitle, setRoomName] = useState(props.location.state.data.title)
@@ -52,7 +58,7 @@ function ChatRoom(props) {
     const [memberList, setMemberList] = useState() 
 
    window.onload = () => {
-        console.log('here')
+        // console.log('here')
         const temp = props.location.state.data.members
         setMemberList(props.location.state.data.members)
    }
@@ -72,33 +78,59 @@ function ChatRoom(props) {
     const handleCancel = () => {
         setSettingsVisible(false)
     }
-    const sendMessage = () => {
+
+    const onInputChange = (e) => {
+        setInputValue(e.target.value)
+    }
+
+    const sendMessage = (e) => {
+        const messageText = e.target.value
         //Get who is sending message
         axios.get('http://127.0.0.1:8000/auth/users/me/', config).then(response => {
             return response.data.username
         }).then((response) => {
         const input = {
-            message: 'Greetings',
+            message: messageText,
             sender: {username: response},
             room: {title: roomTitle}
         }
-        console.log(input)
-
+        //POST message
         axios.post('http://127.0.0.1:8000/message/', input, config).then(response => {
-            console.log(response)
-        }).catch(error => (console.log(error)))
-    })}
-
-    const getMessages = () => {
-        axios.get('http://127.0.0.1:8000/room/' + roomTitle + '/', config).then(response => {
-            console.log(response.data.messages)
+        }).catch(error => (console.log(error))).then(() => {
+            //GET new messages and scroll to bottom
+            axios.get('http://127.0.0.1:8000/room/' + roomTitle + '/', config).then(response => {
             return response.data.messages
         }).catch(error => (console.log(error))).then((messages) => {
             axios.get('http://127.0.0.1:8000/message/', config).then(response => {
-                console.log(response.data[0])
+                const mappedMessages = messages.map(id => response.data[id-1])
+                setMessages(mappedMessages)
+                var elem = document.getElementById('messages')
+                elem.scrollTop = elem.scrollHeight 
+            })
+        })
+        })
+        setInputValue('')
+    })}
+
+    //Periodically get new messages
+    const getMessages = () => {
+        axios.get('http://127.0.0.1:8000/room/' + roomTitle + '/', config).then(response => {
+            return response.data.messages
+        }).catch(error => (console.log(error))).then((messages) => {
+            axios.get('http://127.0.0.1:8000/message/', config).then(response => {
+                const mappedMessages = messages.map(id => response.data[id-1])
+                setMessages(mappedMessages)
             })
         })
     }
+
+    var messageInterval = null
+    useEffect(() => {
+        messageInterval = setInterval(getMessages,1000)
+        return () => {
+            clearInterval(messageInterval)
+        }
+    })
 
     const handleEditTitle = (e) => {
         console.log(e.target.value)
@@ -123,7 +155,6 @@ function ChatRoom(props) {
     }
     return (
         <div>
-            <Button onClick = {getMessages}>getMessages</Button>
             <Row justify = 'center'>
             {/* <Button onClick = {handle}>
                 test prop passing
@@ -151,16 +182,20 @@ function ChatRoom(props) {
             </div>
             </Col>
             <Col flex = 'auto'>
-            <div className = 'messagebox' style = {{
+            <div className = 'messagebox' id = 'messages' style = {{
                 height: '300px',
                 border: '2px solid grey',
-                borderRadius:'5px'
+                borderRadius:'5px',
+                margin: '1px',
+                overflow: 'auto'
             }}>
-                {messages.map((value,index) => {
+                    {messages.map((value) => {
                     return (
-                        <div>
-                            {value}
-                        </div>
+                        <p key={value.unique_id}>
+                            {value.sender}
+                            {': '}
+                            {value.message}
+                        </p>
                     )
                 })}
             </div>
@@ -191,8 +226,11 @@ function ChatRoom(props) {
             <Row justify= 'center'>
             <Col flex = '240px'></Col>
             <Col flex = 'auto'>
-            <Input  style = {{
-            }}>
+            <Input
+                value = {inputValue}
+                onChange = {onInputChange}
+                onPressEnter = {sendMessage}
+            >
             </Input>
             </Col>
             <Col flex = '240px'>
