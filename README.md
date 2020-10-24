@@ -1,3 +1,3 @@
 # messenger-rest-api
 
-most backend code provided by [@colbytanderson](https://github.com/colbytanderson)
+most backend code in collaboration with [@colbytanderson](https://github.com/colbytanderson)
