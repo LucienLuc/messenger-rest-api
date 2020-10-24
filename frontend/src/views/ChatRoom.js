@@ -1,12 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
-import {SettingFilled} from '@ant-design/icons';
+import {BellOutlined, CheckOutlined, CloseOutlined} from '@ant-design/icons';
 
 import {Input,Button, Descriptions, Row, Col, Modal, List, message} from 'antd'
-
-import InfiniteScroll from 'react-infinite-scroller';
-const {Search} = Input;
 
 function ChatRoom(props) {
     const accessToken = localStorage.getItem('accessToken')
@@ -19,64 +16,27 @@ function ChatRoom(props) {
     }
 
     const [inputValue, setInputValue] = useState('')
-    const [messages, setMessages] = useState([])
-    //States for infinite scroll
-    const [loading, setLoading] = useState(false)
-    const [hasMore, setHasMore] = useState(true)
 
-    const [settingsVisible, setSettingsVisible] = useState(false)
+    //State data for room
+    const [messages, setMessages] = useState([])
+    const [roomRequests, setRoomRequests]= useState([])
+    const [memberList, setMemberList] = useState() 
+
+    const [requestsVisible, setRequestsVisible] = useState(false)
+
     const [roomTitle, setRoomName] = useState(props.location.state.data.title)
     const [roomDescription, setRoomDescription] = useState(props.location.state.data.description)
 
-    const roomName = 'room1'
-
-    // const chatSocket = new WebSocket(
-    //     'ws://'
-    //     + 'localhost:8000'
-    //     + '/ws/chat/'
-    //     + roomName
-    //     + '/'
-    // );
-
-    // chatSocket.onmessage = function(e) {
-    // const data = JSON.parse(e.data);
-    // console.log(data);
-    // setMessages(messages.concat(data.message))
-    // };
-
-    // chatSocket.onclose = function(e) {
-    // console.error('Chat socket closed unexpectedly');
-    // };
-
-    // const sendMessage = () => {
-    //     console.log('sending message')
-    //     chatSocket.send(JSON.stringify({
-    //     'message': 'allah'
-    //     }));
-    // }
-
-    const [memberList, setMemberList] = useState() 
-
-   window.onload = () => {
-        // console.log('here')
-        const temp = props.location.state.data.members
-        setMemberList(props.location.state.data.members)
-   }
-
-    const handle = () => {
-        console.log(props.location.state.title)
-    }
-
     const handleSettingsClick = () => {
-        setSettingsVisible(true)
+        setRequestsVisible(true)
     }
 
     const handleOk = () => {
-        setSettingsVisible(false)
+        setRequestsVisible(false)
     }
 
     const handleCancel = () => {
-        setSettingsVisible(false)
+        setRequestsVisible(false)
     }
 
     const onInputChange = (e) => {
@@ -123,43 +83,87 @@ function ChatRoom(props) {
             })
         })
     }
+    //Periodically get room requests
+    const getRoomRequests = () => {
+        const roomTitle = props.location.state.data.title
+        axios.get('http://127.0.0.1:8000/room/' + roomTitle + '/', config).then(response => {
+            return response.data.requests
+        }).then(response => {
+            setRoomRequests(response)
+        })
+    }
 
+    //Periodically get member list
+    const getMembers = () => {
+        const roomTitle = props.location.state.data.title
+        axios.get('http://127.0.0.1:8000/room/' + roomTitle + '/', config).then(response => {
+            return response.data.members
+        }).then(response => {
+            setMemberList(response)
+        })
+    }
+
+    var roomRequestsInterval = null
     var messageInterval = null
+    var memberInterval = null
     useEffect(() => {
         messageInterval = setInterval(getMessages,1000)
+        roomRequestsInterval = setInterval(getRoomRequests,1000)
+        memberInterval = setInterval(getMembers,1000)
         return () => {
             clearInterval(messageInterval)
+            clearInterval(roomRequestsInterval)
+            clearInterval(memberInterval)
         }
     })
 
-    const handleEditTitle = (e) => {
-        console.log(e.target.value)
-        const config = {
-            'roomName': roomTitle,
-            'title' : 'newroom'
-    }
-        axios.post('http://127.0.0.1:8000/chat/changeRoomTitle',config).then(response => {
-            console.log(response)
-        })
+    function AcceptButton(prop) {
+        const handleAcceptRequest = () => {
+            const roomTitle = props.location.state.data.title
+            const input = {
+                username: {'username': prop.requestee_username},
+                room: {'title': roomTitle}
+            }
+            axios.post('http://127.0.0.1:8000/room/' + roomTitle + '/AcceptUser/', input, config).then(response=> {
+                message.success('Accepted ' + prop.requestee_username + '\'s request!' )
+            }).catch(error => {
+                console.log(error)
+            })
+        }
+
+        return (
+            <CheckOutlined onClick = {handleAcceptRequest} style= {{
+                color: 'lime',
+                margin: '2px'
+            }}/>
+        )
     }
 
-    const handleEditDescription = (e) => { 
-        console.log(e.target.value)
-        const config = {
-            'roomName': roomTitle,
-            'description' : 'new description'
+    function RejectButton(prop) {
+        const handleAcceptRequest = () => {
+            const roomTitle = props.location.state.data.title
+            const input = {
+                username: {'username': prop.requestee_username},
+                room: {'title': roomTitle}
+            }
+            axios.post('http://127.0.0.1:8000/room/' + roomTitle + '/RejectUser/', input, config).then(response=> {
+                message.warning('Rejected ' + prop.requestee_username + '\'s request' )
+            }).catch(error => {
+                console.log(error)
+            })
+        }
+
+        return (
+            <CloseOutlined onClick = {handleAcceptRequest} style= {{
+                color: 'red',
+                margin: '2px'
+            }}/>
+        )
     }
-        axios.post('http://127.0.0.1:8000/chat/changeDescription',config).then(response => {
-            console.log(response)
-        })
-    }
+
     return (
         <div>
             <Row justify = 'center'>
-            {/* <Button onClick = {handle}>
-                test prop passing
-            </Button>
-            <SettingFilled></SettingFilled> */}
             <Col>
             <div className = 'info' style = {{
                 height: '250px',
@@ -169,7 +173,7 @@ function ChatRoom(props) {
                 borderRadius:'5px',
                 padding: '4px'
             }}>
-                <SettingFilled onClick = {handleSettingsClick}/>
+                <BellOutlined onClick = {handleSettingsClick}/>
                 <Descriptions 
                     title = 'Room Info' 
                     size = 'small' 
@@ -241,13 +245,29 @@ function ChatRoom(props) {
             </Col>
             </Row>
             <Modal 
-            title = 'Room Options' 
-            visible = {settingsVisible}
+            title = 'Room Requests' 
+            visible = {requestsVisible}
             onOk = {handleOk}
             onCancel = {handleCancel}
+            footer = {[
+                <Button key = 'close' danger onClick = {handleCancel}>Close</Button>
+            ]}
             >
-                <Input defaultValue = {roomTitle} onPressEnter = {handleEditTitle}></Input>
-                <Input defaultValue = {roomDescription} onPressEnter = {handleEditDescription}></Input>
+                {roomRequests.map((value) => {
+                    return (
+                        <div key={value}>
+                            <p id= {value} style= {{
+                                // float: 'left',
+                                margin: '2px',
+                                padding: '2px'
+                            }}>
+                                {value}
+                            </p>
+                            <AcceptButton requestee_username={value}/>
+                            <RejectButton requestee_username={value}/>
+                        </div>
+                    )
+                })}
             </Modal>
         </div>
     )

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
 import {List, Button, Drawer, Form, Input, message} from 'antd'
@@ -27,7 +27,7 @@ function ChatLobby(props) {
     //Assumes a lobby named Lobby1 has been created in the backend
     const getRoomData = () => {
         axios.get('http://127.0.0.1:8000/lobby/Lobby1/', config).then(response => {
-            console.log(response.data.room_lobby)
+            // console.log(response.data.room_lobby)
             setRoomData(response.data.room_lobby)
         }).catch(error => console.log(error))
 
@@ -37,6 +37,14 @@ function ChatLobby(props) {
             setUser(response.data.username)
         }).catch(error => console.log(error))
     }
+
+    var roomInterval = null
+    useEffect(() => {
+        roomInterval = setInterval(getRoomData,1000)
+        return () => {
+            clearInterval(roomInterval)
+        }
+    })
 
     //change to also include more fields
     const onCreateRoom = (values) => {
@@ -84,16 +92,24 @@ function ChatLobby(props) {
                 data: roomData
             }
         })
-
     }
 
-    const handleJoinRequest = (user) => {
+    const handleJoinRequest = (roomData) => {
+        console.log(roomData)
         const input = {
-            username: user
+            username: {'username': currentUser},
+            room: {'title': roomData.title}
         }
-        axios.options('http://127.0.0.1:8000/room/room1/UserRequest/', config).then(response => {
-            console.log(response.data)
-        }).catch(error => console.log(error))
+        axios.post('http://127.0.0.1:8000/room/' + roomData.title + '/UserRequest/', input, config).then(response => {
+            message.success('Reuested to join ' + roomData.title + '!')
+        }).catch(error => {
+            if (error.response.status === 409) {
+                message.error('Already requested to join that room!')
+            }
+            else {
+                console.log(error)
+            }
+        })
     }
 
     function JoinButton(prop) {

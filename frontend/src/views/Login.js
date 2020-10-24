@@ -5,50 +5,13 @@ import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios'
 
-//import App from '../App';
-
 function Login(props) {
    const accessToken = localStorage.getItem('accessToken')
 
-  //   const {access, changeAccess} = useContext(UserContext)
-
   const config = {
     headers: {
-      // 'Access-Control-Allow-Origin': '*',
-      // 'Access-Control-Allow-Methods': 'HEAD, GET, POST, PUT, PATCH, DELETE', 
-      // 'Content-type': 'application/json',
       'Authorization': `JWT ${accessToken}`,
     }
-  }
-
-  const changePassword = () => {
-    console.log(config.headers.Authorization)
-    axios.get('http://127.0.0.1:8000/auth/users/me/', config).then(response => {
-        console.log(response)
-    }).catch(error => console.log(error))
-  }
-
-  // delete this later or move it
-  const req = () => {
-    axios.post('http://127.0.0.1:8000/chat/requestToJoinRoom/', {roomName: 'adsf'}, config).then(response => console.log(response))
-    .catch(error => console.log(error))
-  }
-
-  const otherReq = () => {
-    let conf = config
-    conf.params = {
-      roomName: 'adsf'
-    }
-    axios.get('http://127.0.0.1:8000/chat/getRequestsForRoom/', conf).then(response => console.log(response))
-    .catch(error => console.log(error))
-  }
-
-  const acceptReq = () => {
-    axios.post('http://127.0.0.1:8000/chat/acceptUser/', {
-      roomName: 'adsf',
-      username: 'a'
-    },config).then(response => console.log(response))
-    .catch(error => console.log(error))
   }
 
     const onLogin = (values) => {
@@ -62,7 +25,12 @@ function Login(props) {
                 console.log(response)
                 message.success('Successfully logged in!')
                 props.history.push('/lobby')
-            }).catch(error => console.log(error))
+            }).catch(error => {
+              console.log('here')
+              if (error.response.status === 401) {
+                message.error('Invalid Credentials!')
+              }
+            })
       }
 
     return (

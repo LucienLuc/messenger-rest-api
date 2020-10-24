@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 
 # importing serializers
-from apps.room.main.serializers import RoomSerializer
+from apps.room.main.serializers import RoomSerializer, GetRoomSerializer
 from apps.myauth.main.serializers import UserSerializer, GetUserSerializer
 from apps.lobby.main.serializers import LobbySerializer, GetLobbySerializer
 from django.contrib.auth import get_user_model
@@ -37,22 +37,38 @@ class RoomViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], permission_classes=(RoomCreator, RoomAdmin))
     def AcceptUser(self, request, pk):
-        room = self.get_object()
-        serializer = GetUserSerializer(data=dict(request.data.dict()))
-        if serializer.is_valid():
-            user = user = get_object_or_404(User, username = serializer.validated_data['username'])
+        roomSerializer = GetRoomSerializer(data=request.data['room'])
+        userSerializer = GetUserSerializer(data=request.data['username'])
+        if userSerializer.is_valid() and roomSerializer.is_valid():
+            user = get_object_or_404(User, username = userSerializer.validated_data['username'])
+            room = get_object_or_404(Room, title = roomSerializer.validated_data['title'])
             if user in room.requests.all():
                 room.members.add(user)
+                room.requests.remove(user)
                 return Response(data=request.data, status= 200)
-            return Response(data=request.data, status= 400)
+            return Response(data=request.data, status= 409)
+        return Response(data=request.data, status= 400)
+
+    @action(detail=True, methods=['post'], permission_classes=(RoomCreator, RoomAdmin))
+    def RejectUser(self, request, pk):
+        roomSerializer = GetRoomSerializer(data=request.data['room'])
+        userSerializer = GetUserSerializer(data=request.data['username'])
+        if userSerializer.is_valid() and roomSerializer.is_valid():
+            user = get_object_or_404(User, username = userSerializer.validated_data['username'])
+            room = get_object_or_404(Room, title = roomSerializer.validated_data['title'])
+            if user in room.requests.all():
+                room.requests.remove(user)
+                return Response(data=request.data, status= 200)
+            return Response(data=request.data, status= 409)
         return Response(data=request.data, status= 400)
 
     @action(detail=True, methods=['post'])
     def UserRequest(self, request, pk):
-        room = self.get_object()
-        serializer = GetUserSerializer(data=dict(request.data.dict()))
-        if serializer.is_valid():
-            user = user = get_object_or_404(User, username = serializer.validated_data['username'])
+        roomSerializer = GetRoomSerializer(data=request.data['room'])
+        userSerializer = GetUserSerializer(data=request.data['username'])
+        if userSerializer.is_valid() and roomSerializer.is_valid():
+            user =  get_object_or_404(User, username = userSerializer.validated_data['username'])
+            room = get_object_or_404(Room, title = roomSerializer.validated_data['title'])
             if user not in room.requests.all():
                 room.requests.add(user)
                 return Response(data=request.data, status= 200)

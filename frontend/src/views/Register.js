@@ -15,8 +15,12 @@ function Register(props) {
                 console.log(response)
                 message.success('Successfully registered!')
                 props.history.push('/login')
-            }).catch(error => console.log(error))
-    }
+            }).catch(error => {
+                if (error.response.status === 400) {
+                    message.error('Sorry! That username already exists.')
+                }
+            }
+        )}
     
     return (
         <div style = {{margin: '100px 40% 100px'}}>
