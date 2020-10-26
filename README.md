@@ -11,9 +11,11 @@ Backend code in collaboration with [@colbytanderson](https://github.com/colbytan
   * In `./messenger-rest-api/`run `pip install -r requirements.pip`
 2. Change directory to `./messenger-rest-api/backend/src/`
 3. Start backend Django server by running the following commands 
+  ```
   python manage.py makemigrations
   python manage.py migrate
   python manage.py startserver
+  ```
 4. Install Node modules 
   * Change directory to `/messenger-rest-api/frontend/`
   * run `npm i`
