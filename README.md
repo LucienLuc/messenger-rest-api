@@ -15,8 +15,8 @@ Backend code in collaboration with [@colbytanderson](https://github.com/colbytan
   python manage.py migrate
   python manage.py startserver
 4. Install Node modules 
-  1. Change directory to `/messenger-rest-api/frontend/`
-  2. run `npm i`
+  * Change directory to `/messenger-rest-api/frontend/`
+  * run `npm i`
 5. Start frontend React server by running `npm run start`
 
 * Backend server hosted on localhost:8000
