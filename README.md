@@ -19,7 +19,7 @@ Backend code in collaboration with [@colbytanderson](https://github.com/colbytan
   2. run `npm i`
 5. Start frontend React server by running `npm run start`
 
-* Backend server hosted on localhost::8000
+* Backend server hosted on localhost:8000
 * Frontend server hosted on localhost:3000
 
 ## Dependencies
